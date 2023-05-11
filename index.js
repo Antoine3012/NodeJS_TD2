@@ -1,8 +1,8 @@
 // inclure les dépendances et middlewares
-const mysql = require('mysql')
+const mysql = require('mysql2')
 const express = require('express')
 const ejs = require('ejs')
-const bodyparser = require('body-parser')
+var bodyParser = require('body-parser')
 const iniparser = require('iniparser')
 
 // activer les dépendances
@@ -23,10 +23,10 @@ mysqlconnexion.connect((err) => {
 })
 
 // activer le middleware et lancer l'application sur le port 3000
-app.use(bodyparser.urlencoded({ extended: false }))
-app.use(bodyparser.json())
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 
-//app.use(bodyparser.urlencoded({ extended: true })) // pour les formulaires encodés
+//app.use(bodyParser.urlencoded({ extended: true })) // pour les formulaires encodés
 app.listen(3000, () => console.log('le serveur Livre d\'Or est prêt.'))
 
 // utiliser les routesrs
@@ -55,19 +55,6 @@ app.get('/search/', (req, res) => {
                 res.send(lignes)
             }
         })
-})
-
-// voir un message choisi par ID (parameters)
-app.get('/LivreOr/:id', (req, res) => {
-    let critere = req.params.id
-    console.log("ID = " + critere)
-    mysqlconnexion.query('SELECT * FROM tlivre WHERE id = ?', [critere], (err,
-        lignes, champs) => {
-        if (!err) {
-            console.log(lignes)
-            res.send(lignes)
-        }
-    })
 })
 
 // afficher le formulaire
@@ -99,11 +86,10 @@ app.post('/LivreOr', (req, res) => {
     let msgNote = req.body.note
 	console.log(req.body);
 	console.log("coucou");
-
+    
     console.log(`Ajout msg ID ${msgID} de ${msgName} contenant ${msgMsg} et noté ${msgNote}`)
     let requeteSQL = "INSERT INTO tlivre (id, name, message, evaluation) VALUES"
-    requeteSQL = requeteSQL + ' (' + msgID + ',"' + msgName + '","' + msgMsg + '",' +
-        msgNote + ')'
+    requeteSQL = requeteSQL + ' (' + msgID + ',"' + msgName + '","' + msgMsg + '",' + msgNote + ')'
     console.log("Requete : " + requeteSQL)
     mysqlconnexion.query(requeteSQL, (err, lignes, champs) => {
         if (!err) {
@@ -129,19 +115,6 @@ app.get('/LivreOr/:id', (req, res) => {
     })
 })
 
-// chercher les messages contenant ElementSearch dans le champ message (query)
-app.get('/search/', (req, res) => {
-    let critere = '%' + req.query.msgSearch + '%'
-    console.log("Find this : " + critere)
-    mysqlconnexion.query('SELECT * FROM tlivre WHERE message LIKE ?', [critere],
-        (err, lignes, champs) => {
-            if (!err) {
-                console.log(lignes)
-                res.send(lignes)
-            }
-        })
-})
-
 // effacer un message choisi par ID (parameters)
 app.delete('/LivreOr/:id', (req, res) => {
     let critere = req.params.id
@@ -157,28 +130,3 @@ app.delete('/LivreOr/:id', (req, res) => {
         }
     })
 })
-
-// ajouter un message (query) NOTE: formulaire : application/x-www-form-urlencoded
-app.post('/LivreOr', (req, res) => {
-    let msgID = req.body.id
-    let msgName = req.body.name
-    let msgMsg = req.body.msg
-    let msgNote = req.body.note
-    console.log(req);
-    console.log("coucou");
-    console.log(`Ajout msg ID ${msgID} de ${msgName} contenant ${msgMsg} et noté ${msgNote}`)
-    let requeteSQL = "INSERT INTO tlivre (id, name, message, evaluation) VALUES"
-    requeteSQL = requeteSQL + ' (' + msgID + ',"' + msgName + '","' + msgMsg + '",' +
-        msgNote + ')'
-    console.log("Requete : " + requeteSQL)
-    mysqlconnexion.query(requeteSQL, (err, lignes, champs) => {
-        if (!err) {
-            console.log("Insertion terminé");
-            res.redirect("/LivreOr");
-        } else {
-            console.log("Erreur lors de l'enregistrment")
-            res.send("Erreur ajout : " + JSON.stringify(err))
-        }
-    })
-})
-

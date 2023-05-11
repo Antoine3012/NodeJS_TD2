@@ -1,11 +1,11 @@
 <%- include('header.ejs') %>
     <div class="ui main container">
-        <form action="/LivreOr" method="POST" enctype="multipart/form-data" class="ui form">
+        <form action="/LivreOr" method="POST" enctype="application/x-www-form-urlencoded" class="ui form">
             <div class="field">
                 <label for="id">id : </label>
                 <input type="text" name="id" id="id" value="11">
                 <label for="nom">nom : </label>
-                <input type="text" name="name" id="nom" value="ROUMANET">
+                <input type="text" name="name" id="name" value="ROUMANET">
                 <label for="message">message : </label>
                 <textarea name="msg" id="msg">Test</textarea>
                 <label for="note">Evaluation : </label>
