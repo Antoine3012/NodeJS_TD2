@@ -1,0 +1,22 @@
+<%- include('header.ejs') %>
+    <div class="ui main container">
+        <form action="/LivreOr" method="POST" enctype="multipart/form-data" class="ui form">
+            <div class="field">
+                <label for="id">id : </label>
+                <input type="text" name="id" id="id" value="11">
+                <label for="nom">nom : </label>
+                <input type="text" name="name" id="nom" value="ROUMANET">
+                <label for="message">message : </label>
+                <textarea name="msg" id="msg">Test</textarea>
+                <label for="note">Evaluation : </label>
+                <input type="text" name="note" id="note" value="4">
+            </div>
+            <button type="submit" class="ui blue animated submit large button">
+                <div class="visible content">Envoyer</div>
+                <div class="hidden content">
+                    <i class="right arrow icon"></i>
+                </div>
+            </button>
+        </form>
+    </div>
+<%- include('footer.ejs') %>

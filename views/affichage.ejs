@@ -1,0 +1,15 @@
+<%- include('header.ejs') %>
+    <h1>Affichage : </h1>
+    <div class="ui main container">
+        <ul>
+            <% LivreOr.forEach(function(user){ %>
+                <li>
+                    <a href="http://localhost:3000/LivreOr/<%=user.id%>">&#10006;</a>
+                    <strong>
+                        <%= user.name %>
+                    </strong> a dit <%= user.message %>
+                </li>
+                <% })%>
+        </ul>
+    </div>
+<%- include('footer.ejs') %>
